@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { ArrowRight, Eye, EyeOff, LockKeyhole, ShieldCheck, UserRound } from 'lucide-react';
+import { ArrowLeft, ArrowRight, Eye, EyeOff, Languages, LockKeyhole, ShieldCheck, UserRound } from 'lucide-react';
 import BrandMark from '../components/BrandMark';
 
 const prototypeCredentials = {
@@ -7,7 +7,7 @@ const prototypeCredentials = {
   password: 'TonleSap2038!',
 };
 
-export default function AdminLoginPage({ onAuthenticate }) {
+export default function AdminLoginPage({ language = 'en', onToggleLanguage, onAuthenticate, onNavigate }) {
   const [userId, setUserId] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
@@ -26,7 +26,17 @@ export default function AdminLoginPage({ onAuthenticate }) {
   return (
     <div className="admin-login-page">
       <section className="admin-login-context" aria-label="PulseWatch authority workspace">
-        <div className="admin-login-brand"><BrandMark /><span><strong>PulseWatch</strong><small>Authority workspace</small></span></div>
+        <div className="admin-login-header">
+          <div className="admin-login-brand"><BrandMark /><span><strong>PulseWatch</strong><small>Authority workspace</small></span></div>
+          <div className="admin-login-header-actions">
+            <button className="admin-user-return" onClick={() => onNavigate('pulse')} type="button">
+              <ArrowLeft size={16} /> Back to user app
+            </button>
+            <button className="admin-language-toggle" data-no-translate onClick={onToggleLanguage} type="button" aria-label={language === 'en' ? 'Switch to Khmer' : 'Switch to English'}>
+              <Languages size={17} /> {language === 'en' ? 'ខ្មែរ' : 'English'}
+            </button>
+          </div>
+        </div>
         <div className="admin-login-message">
           <span><i /> Restricted operations access</span>
           <h1>One trusted view of the flood pulse.</h1>
@@ -40,6 +50,12 @@ export default function AdminLoginPage({ onAuthenticate }) {
           <span className="admin-login-kicker"><ShieldCheck size={16} /> Secure sign in</span>
           <h2>Authority access</h2>
           <p>Enter your assigned PulseWatch credentials.</p>
+
+          <div className="admin-prototype-credentials" data-no-translate>
+            <strong>Prototype login details</strong>
+            <span>User ID: <b>{prototypeCredentials.userId}</b></span>
+            <span>Password: <b>{prototypeCredentials.password}</b></span>
+          </div>
 
           <label htmlFor="admin-user-id">User ID</label>
           <div className="admin-login-field">

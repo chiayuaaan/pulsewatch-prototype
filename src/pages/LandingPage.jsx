@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { ArrowRight, Menu, Volume2, VolumeX, X } from 'lucide-react';
+import { ArrowRight, Languages, Menu, Volume2, VolumeX, X } from 'lucide-react';
 
 const methodSteps = [
   {
@@ -41,7 +41,7 @@ function clamp(value, min = 0, max = 1) {
   return Math.min(max, Math.max(min, value));
 }
 
-export default function LandingPage({ onNavigate }) {
+export default function LandingPage({ language = 'en', onToggleLanguage, onNavigate }) {
   const rootRef = useRef(null);
   const heroRef = useRef(null);
   const darkRef = useRef(null);
@@ -306,6 +306,9 @@ export default function LandingPage({ onNavigate }) {
         <p>See the pulse. Predict the change.<br />Protect what depends on it.</p>
       </footer>
 
+      <button className="film-language-toggle" data-no-translate type="button" onClick={onToggleLanguage} aria-label={language === 'en' ? 'Switch to Khmer' : 'Switch to English'}>
+        <Languages size={14} /> {language === 'en' ? 'ខ្មែរ' : 'English'}
+      </button>
       <button className="film-motion-toggle" type="button" onClick={() => setMotionOn((value) => !value)}>
         {motionOn ? <Volume2 size={11} /> : <VolumeX size={11} />}
         MOTION {motionOn ? 'ON' : 'OFF'}

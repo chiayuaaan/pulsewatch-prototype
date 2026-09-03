@@ -8,6 +8,7 @@ import {
   Download,
   Droplets,
   Gauge,
+  Languages,
   LogOut,
   Map,
   MapPin,
@@ -60,7 +61,7 @@ function stationMatchesFilter(station, filter) {
   return true;
 }
 
-export default function AdminPage({ onSignOut }) {
+export default function AdminPage({ language = 'en', onToggleLanguage, onSignOut }) {
   const [period, setPeriod] = useState('7D');
   const [filter, setFilter] = useState('all');
   const [query, setQuery] = useState('');
@@ -122,6 +123,7 @@ export default function AdminPage({ onSignOut }) {
           <button onClick={() => jumpTo('admin-network')} type="button">Sensor network</button>
         </nav>
         <div className="admin-topbar-actions">
+          <button className="admin-language-toggle" data-no-translate onClick={onToggleLanguage} type="button" aria-label={language === 'en' ? 'Switch to Khmer' : 'Switch to English'}><Languages size={16} /> {language === 'en' ? 'ខ្មែរ' : 'English'}</button>
           <button className="admin-icon-button" onClick={refreshDashboard} type="button" aria-label="Refresh dashboard"><RefreshCw className={refreshing ? 'spin' : ''} size={17} /></button>
           <button className="admin-exit" onClick={onSignOut} type="button"><LogOut size={16} /> Sign out</button>
         </div>

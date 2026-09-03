@@ -141,7 +141,7 @@ export default function ReportPage({ onNavigate }) {
           />
           <button className={photo ? 'evidence-button attached' : 'evidence-button'} onClick={() => photoInputRef.current?.click()} type="button">
             {photo ? <CircleCheck size={21} /> : <Camera size={21} />}
-            <span><strong>{photo ? 'Change photo' : 'Add a photo'}</strong><small>{photo ? photo.name : 'Choose from your library'}</small></span>
+            <span><strong>{photo ? 'Change photo' : 'Add a photo'}</strong><small data-no-translate={photo ? 'true' : undefined}>{photo ? photo.name : 'Choose from your library'}</small></span>
           </button>
           <button className={location ? 'evidence-button attached' : 'evidence-button'} onClick={addLocation} disabled={locationStatus === 'loading'} type="button">
             {locationStatus === 'loading' ? <LoaderCircle className="spin" size={21} /> : location ? <CircleCheck size={21} /> : <LocateFixed size={21} />}
@@ -155,14 +155,14 @@ export default function ReportPage({ onNavigate }) {
         {photo && (
           <figure className="report-photo-preview">
             <img src={photoPreview} alt="Selected report evidence" />
-            <figcaption><span><strong>Photo ready</strong><small>{photo.name}</small></span><button onClick={removePhoto} type="button"><X size={16} /> Remove</button></figcaption>
+            <figcaption><span><strong>Photo ready</strong><small data-no-translate>{photo.name}</small></span><button onClick={removePhoto} type="button"><X size={16} /> Remove</button></figcaption>
           </figure>
         )}
 
         {location && (
           <section className="report-location-preview" aria-live="polite">
             <LocateFixed size={18} />
-            <div><strong>Current location added</strong><span>{location.lat.toFixed(5)}, {location.lng.toFixed(5)} · accurate to about {location.accuracy} m</span></div>
+            <div><strong>Current location added</strong><span><span data-no-translate>{location.lat.toFixed(5)}, {location.lng.toFixed(5)}</span> · accurate to about {location.accuracy} m</span></div>
           </section>
         )}
         {locationStatus === 'error' && <p className="report-location-error" role="alert">{locationError}</p>}

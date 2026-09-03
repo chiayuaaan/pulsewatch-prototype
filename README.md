@@ -10,17 +10,24 @@ A responsive React/Vite prototype that introduces PulseWatch through a cinematic
 - Full station detail and sensor-health view
 - Three-month forecast
 - Alerts and action guidance
-- Mock PulseWatch assistant
+- OpenAI-powered PulseWatch guidance assistant, restricted to prototype readings
+- AI-generated Khmer audio guidance with browser and device fallbacks
+- App-wide English-to-Khmer interface translation with local caching
+- Separate authority sign-in and operations dashboard
 - Advanced feature hub
 - Adaptive fish-refuge monitoring
 - Community observation report and success flow
 - Impact evidence and methodology
 
-No backend, SAP tenant, sensor feed, login, or OpenAI API key is required.
+The displayed sensor readings remain demonstration data. Khmer translation, the guidance assistant, and Khmer audio use small server-side Vercel functions so the OpenAI API key is never exposed in the browser.
 
 ## File structure
 
 ```text
+api/
+├── chat.js                   Grounded guidance assistant endpoint
+├── khmer-audio.js           Khmer text-to-speech endpoint
+└── translate.js              Secure Khmer translation endpoint
 src/
 ├── App.jsx                    Small navigation controller
 ├── components/
@@ -34,6 +41,8 @@ src/
 ├── data/
 │   ├── mockData.js
 │   └── navigation.js
+├── hooks/
+│   └── useAutoTranslate.js    Shared translation and browser cache
 └── pages/
     ├── AlertsPage.jsx
     ├── AskPage.jsx
@@ -60,6 +69,20 @@ npm run dev
 ```
 
 Open the local URL shown in the terminal. For the intended layout, use a phone-sized browser window or your browser's mobile device preview.
+
+## Enable OpenAI features
+
+Add these environment variables in Vercel under **Project → Settings → Environment Variables**, then redeploy:
+
+```text
+OPENAI_API_KEY=your_key_here
+OPENAI_TRANSLATION_MODEL=gpt-5.6-luna
+OPENAI_CHAT_MODEL=gpt-5.6-luna
+OPENAI_TTS_MODEL=gpt-4o-mini-tts
+OPENAI_TTS_VOICE=marin
+```
+
+Only `OPENAI_API_KEY` is required; the model and voice variables above are optional overrides. The first translation of a screen is requested in batches. Results are cached in the browser, so previously translated screens can be reused on a slow or interrupted connection. Never place the API key in a variable beginning with `VITE_` because that would expose it to visitors.
 
 ## Production note
 

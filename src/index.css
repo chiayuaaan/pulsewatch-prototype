@@ -10739,3 +10739,882 @@ button.admin-sensor-row:hover { background: var(--admin-panel-2); }
   .admin-drawer-backdrop,
   .admin-login-panel form { animation: none; }
 }
+
+/* Unified navigation, legible type, and app-wide language feedback */
+.brand-menu-indicator {
+  width: 28px;
+  height: 28px;
+  margin: 0 0 0 3px !important;
+  color: #171216 !important;
+  display: none !important;
+  align-items: center;
+  justify-content: center;
+}
+
+.app-menu-panel {
+  width: min(360px, calc(100vw - 28px));
+  padding: 10px;
+  border: 1px solid rgba(23, 18, 22, 0.22);
+  color: #171216;
+  background: rgba(250, 247, 239, 0.98);
+  position: absolute;
+  right: 20px;
+  top: calc(100% - 1px);
+  z-index: 70;
+  box-shadow: 0 18px 44px rgba(23, 18, 22, 0.12);
+  backdrop-filter: blur(18px);
+  animation: app-menu-in 180ms cubic-bezier(0.2, 0.8, 0.2, 1) both;
+}
+
+.app-menu-heading {
+  padding: 8px 10px 12px;
+  color: #746d70;
+  display: block;
+  font: 800 11px/1.3 ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  letter-spacing: 0.06em;
+}
+
+.app-menu-panel > button {
+  width: 100%;
+  min-height: 62px;
+  padding: 10px;
+  border: 0;
+  border-top: 1px solid rgba(23, 18, 22, 0.12);
+  color: inherit;
+  background: transparent;
+  display: grid;
+  grid-template-columns: 30px minmax(0, 1fr);
+  align-items: center;
+  gap: 9px;
+  text-align: left;
+  cursor: pointer;
+  transition: color 150ms ease, background-color 150ms ease;
+}
+
+.app-menu-panel > button:hover,
+.app-menu-panel > button:focus-visible {
+  background: rgba(230, 94, 23, 0.08);
+}
+
+.app-menu-panel > button > svg { color: #c34c0f; }
+.app-menu-panel > button > span { min-width: 0; display: flex; flex-direction: column; }
+.app-menu-panel > button strong { font-size: 15px; line-height: 1.2; }
+.app-menu-panel > button small { margin-top: 3px; color: #746d70; font-size: 12px; line-height: 1.3; }
+.app-menu-panel > .authority-menu-link { margin-top: 4px; color: #fff8ef; background: #293432; }
+.app-menu-panel > .authority-menu-link > svg { color: #f08a51; }
+.app-menu-panel > .authority-menu-link small { color: rgba(255, 248, 239, 0.66); }
+.app-menu-panel > .authority-menu-link:hover { color: #171216; background: #f0a078; }
+.app-menu-panel > .authority-menu-link:hover > svg { color: #171216; }
+.app-menu-panel > .authority-menu-link:hover small { color: rgba(23, 18, 22, 0.7); }
+
+@keyframes app-menu-in {
+  from { opacity: 0; transform: translateY(-6px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.translation-status {
+  max-width: min(420px, calc(100vw - 28px));
+  min-height: 42px;
+  padding: 10px 14px;
+  border: 1px solid #286e69;
+  color: #fffaf2;
+  background: #293432;
+  display: flex;
+  align-items: center;
+  position: fixed;
+  right: 14px;
+  top: 84px;
+  z-index: 1000;
+  font: 700 14px/1.4 Arial, 'Noto Sans Khmer', sans-serif;
+  box-shadow: 0 8px 26px rgba(23, 18, 22, 0.18);
+}
+
+.translation-status.error { border-color: #b94831; background: #5d271f; }
+
+/* Home now uses the same header, wordmark, and navigation system as the other community pages. */
+.app-shell[data-page='pulse'] .app-header {
+  height: 72px;
+  padding: max(10px, env(safe-area-inset-top)) 20px 10px;
+  border-bottom: 1px solid rgba(23, 18, 22, 0.2);
+  background: rgba(244, 240, 229, 0.94);
+}
+
+.app-shell[data-page='pulse'] .brand-mark {
+  width: 34px;
+  height: 34px;
+  border: 0;
+  border-radius: 50%;
+  color: #171216;
+  background: #e65e17;
+}
+
+.app-shell[data-page='pulse'] .brand-lockup { gap: 11px; }
+.app-shell[data-page='pulse'] .brand-button { min-height: 44px; padding: 0; }
+.app-shell[data-page='pulse'] .brand-lockup strong {
+  color: #171216;
+  font-family: Georgia, 'Times New Roman', serif;
+  font-size: 18px;
+  font-weight: 700;
+  letter-spacing: -0.045em;
+}
+
+.app-shell[data-page='pulse'] .brand-lockup .brand-copy > span {
+  margin-top: 4px;
+  color: #746d70;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.app-shell[data-page='pulse'] .language-button,
+.app-shell[data-page='pulse'] .menu-button {
+  min-width: 44px;
+  min-height: 44px;
+  border: 1px solid rgba(23, 18, 22, 0.2);
+  border-radius: 0;
+  color: #171216;
+  background: rgba(250, 247, 239, 0.76);
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.app-shell[data-page='pulse'] .menu-button.active { color: #fff8ef; border-color: #e65e17; background: #e65e17; }
+.app-shell[data-page='pulse'] .app-content { height: calc(100dvh - 72px - 74px); }
+.app-shell[data-page='pulse'] .bottom-nav {
+  height: 74px;
+  padding: 6px 8px max(7px, env(safe-area-inset-bottom));
+  border-top: 1px solid rgba(23, 18, 22, 0.2);
+  background: rgba(244, 240, 229, 0.96);
+}
+
+.app-shell[data-page='pulse'] .nav-button {
+  color: #787174;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-size: 11px;
+  font-weight: 800;
+}
+
+/* Larger information type across every non-Home community screen. */
+.app-shell:not(.landing-mode):not(.onboarding-mode):not(.admin-mode):not([data-page='pulse']) .page p {
+  font-size: clamp(15px, 0.45vw + 11px, 17px);
+  line-height: 1.55;
+}
+
+.app-shell:not(.landing-mode):not(.onboarding-mode):not(.admin-mode):not([data-page='pulse']) .page small {
+  font-size: clamp(12px, 0.25vw + 10px, 14px);
+  line-height: 1.4;
+}
+
+.app-shell:not(.landing-mode):not(.onboarding-mode):not(.admin-mode):not([data-page='pulse']) .eyebrow,
+.app-shell:not(.landing-mode):not(.onboarding-mode):not(.admin-mode):not([data-page='pulse']) .timeline-item > div span,
+.app-shell:not(.landing-mode):not(.onboarding-mode):not(.admin-mode):not([data-page='pulse']) .source-card small,
+.app-shell:not(.landing-mode):not(.onboarding-mode):not(.admin-mode):not([data-page='pulse']) .feature-card .eyebrow {
+  font-size: clamp(11px, 0.25vw + 9px, 13px);
+  line-height: 1.35;
+}
+
+.app-shell:not(.landing-mode):not(.onboarding-mode):not(.admin-mode):not([data-page='pulse']) .back-button,
+.app-shell:not(.landing-mode):not(.onboarding-mode):not(.admin-mode):not([data-page='pulse']) .primary-button,
+.app-shell:not(.landing-mode):not(.onboarding-mode):not(.admin-mode):not([data-page='pulse']) .secondary-button,
+.app-shell:not(.landing-mode):not(.onboarding-mode):not(.admin-mode):not([data-page='pulse']) .text-button,
+.app-shell:not(.landing-mode):not(.onboarding-mode):not(.admin-mode):not([data-page='pulse']) .station-detail-link,
+.app-shell:not(.landing-mode):not(.onboarding-mode):not(.admin-mode):not([data-page='pulse']) .feature-link,
+.app-shell:not(.landing-mode):not(.onboarding-mode):not(.admin-mode):not([data-page='pulse']) .source-link,
+.app-shell:not(.landing-mode):not(.onboarding-mode):not(.admin-mode):not([data-page='pulse']) .advice-toggle,
+.app-shell:not(.landing-mode):not(.onboarding-mode):not(.admin-mode):not([data-page='pulse']) .audio-button {
+  font-size: 14px;
+  line-height: 1.35;
+}
+
+.app-shell:not(.landing-mode):not(.onboarding-mode):not(.admin-mode):not([data-page='pulse']) .filter-pill,
+.app-shell:not(.landing-mode):not(.onboarding-mode):not(.admin-mode):not([data-page='pulse']) .suggestion-row button,
+.app-shell:not(.landing-mode):not(.onboarding-mode):not(.admin-mode):not([data-page='pulse']) .range-tabs button,
+.app-shell:not(.landing-mode):not(.onboarding-mode):not(.admin-mode):not([data-page='pulse']) .scope-toggle button {
+  min-height: 46px;
+  padding: 10px 15px;
+  font-size: 14px;
+  line-height: 1.2;
+}
+
+.app-shell:not(.landing-mode):not(.onboarding-mode):not(.admin-mode):not([data-page='pulse']) .live-pill,
+.app-shell:not(.landing-mode):not(.onboarding-mode):not(.admin-mode):not([data-page='pulse']) .status-pill,
+.app-shell:not(.landing-mode):not(.onboarding-mode):not(.admin-mode):not([data-page='pulse']) .confidence-chip,
+.app-shell:not(.landing-mode):not(.onboarding-mode):not(.admin-mode):not([data-page='pulse']) .forecast-risk,
+.app-shell:not(.landing-mode):not(.onboarding-mode):not(.admin-mode):not([data-page='pulse']) .status-dot-label {
+  min-height: 32px;
+  padding: 7px 10px;
+  font-size: 12px;
+  line-height: 1.25;
+}
+
+.app-shell:not(.landing-mode):not(.onboarding-mode):not(.admin-mode):not([data-page='pulse']) .status-dot-label {
+  min-height: 0;
+  padding: 0;
+}
+
+.app-shell:not(.landing-mode):not(.onboarding-mode):not(.admin-mode):not([data-page='pulse']) .station-metrics span,
+.app-shell:not(.landing-mode):not(.onboarding-mode):not(.admin-mode):not([data-page='pulse']) .station-level-row span,
+.app-shell:not(.landing-mode):not(.onboarding-mode):not(.admin-mode):not([data-page='pulse']) .refuge-metrics span,
+.app-shell:not(.landing-mode):not(.onboarding-mode):not(.admin-mode):not([data-page='pulse']) .impact-metric span {
+  font-size: 13px;
+  line-height: 1.3;
+}
+
+.app-shell:not(.landing-mode):not(.onboarding-mode):not(.admin-mode):not([data-page='pulse']) .station-metrics strong,
+.app-shell:not(.landing-mode):not(.onboarding-mode):not(.admin-mode):not([data-page='pulse']) .refuge-metrics strong,
+.app-shell:not(.landing-mode):not(.onboarding-mode):not(.admin-mode):not([data-page='pulse']) .maintenance-row strong {
+  font-size: 15px;
+  line-height: 1.35;
+}
+
+.app-shell:not(.landing-mode):not(.onboarding-mode):not(.admin-mode):not([data-page='pulse']) .station-directory-heading > span,
+.app-shell:not(.landing-mode):not(.onboarding-mode):not(.admin-mode):not([data-page='pulse']) .sensor-count-badge,
+.app-shell:not(.landing-mode):not(.onboarding-mode):not(.admin-mode):not([data-page='pulse']) .map-key,
+.app-shell:not(.landing-mode):not(.onboarding-mode):not(.admin-mode):not([data-page='pulse']) .chart-legend {
+  font-size: 12px;
+  line-height: 1.35;
+}
+
+.app-shell:not(.landing-mode):not(.onboarding-mode):not(.admin-mode):not([data-page='pulse']) .station-directory-item { min-height: 88px; }
+.app-shell:not(.landing-mode):not(.onboarding-mode):not(.admin-mode):not([data-page='pulse']) .station-directory-item strong { font-size: 14px; }
+.app-shell:not(.landing-mode):not(.onboarding-mode):not(.admin-mode):not([data-page='pulse']) .station-directory-item small { font-size: 12px; }
+.app-shell:not(.landing-mode):not(.onboarding-mode):not(.admin-mode):not([data-page='pulse']) .feature-card p { font-size: 15px; }
+.app-shell:not(.landing-mode):not(.onboarding-mode):not(.admin-mode):not([data-page='pulse']) .page-intro { font-size: 16px; }
+.app-shell:not(.landing-mode):not(.onboarding-mode):not(.admin-mode):not([data-page='pulse']) textarea,
+.app-shell:not(.landing-mode):not(.onboarding-mode):not(.admin-mode):not([data-page='pulse']) input { font-size: 15px; }
+.app-shell:not(.landing-mode):not(.onboarding-mode):not(.admin-mode):not([data-page='pulse']) .report-fieldset legend,
+.app-shell:not(.landing-mode):not(.onboarding-mode):not(.admin-mode):not([data-page='pulse']) .report-label { font-size: 15px; }
+
+/* Story-page annotation type is now readable without changing its composition. */
+.film-coordinate,
+.method-section-label { font-size: 11px; line-height: 1.35; }
+.film-nav nav button,
+.film-hero-copy button,
+.film-contact button,
+.method-copy-stack button { font-size: 11px; }
+.film-scroll-index { font-size: 9px; }
+.film-map-note span { font-size: 10px; }
+.signal-card strong { font-size: 12px; }
+.signal-card span { font-size: 10px; }
+.dark-section-copy small { font-size: 11px; }
+.method-rail {
+  width: 58px;
+  left: clamp(22px, 3.4vw, 56px);
+}
+.method-rail span {
+  grid-template-columns: 26px 1fr;
+  gap: 7px;
+  font-size: 11px;
+}
+.method-copy-stack { left: max(116px, 9vw); }
+.method-copy-stack article > span { font-size: 12px; }
+.method-copy-stack p { font-size: clamp(15px, 1.05vw, 17px); line-height: 1.55; }
+.method-data-points em {
+  min-width: 190px;
+  padding: 10px 11px;
+  font-size: 10px;
+  line-height: 1.5;
+}
+.network-name-row span { font-size: 12px; }
+.film-evidence-intro small { font-size: 11px; }
+.evidence-accordion summary span { font-size: 17px; }
+.evidence-accordion summary small { font-size: 13px; }
+.evidence-accordion details p { font-size: 15px; }
+.film-footer span,
+.film-footer p { font-size: 10px; }
+.film-admin-access,
+.film-motion-toggle { font-size: 10px !important; }
+
+.film-language-toggle {
+  min-height: 34px;
+  padding: 7px 10px;
+  border: 1px solid rgba(21, 16, 22, 0.18);
+  color: var(--film-ink);
+  background: rgba(250, 248, 241, 0.9);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  position: fixed;
+  left: 12px;
+  bottom: calc(12px + env(safe-area-inset-bottom));
+  z-index: 105;
+  font: 850 11px/1.2 ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace !important;
+  cursor: pointer;
+  backdrop-filter: blur(10px);
+}
+
+/* Authority typography scales up while preserving the dashboard grid. */
+.admin-topbar nav button,
+.admin-icon-button,
+.admin-exit,
+.admin-intro-actions > span,
+.admin-intro-actions > button,
+.admin-status-banner button,
+.admin-health-panel > button,
+.admin-response-item button,
+.admin-map-link,
+.admin-network-tools > div button,
+.admin-drawer-action { font-size: 12px; }
+.admin-brand small,
+.admin-kicker,
+.admin-intro p,
+.admin-status-banner span,
+.admin-status-banner p,
+.admin-kpi-card > div,
+.admin-kpi-card p,
+.admin-panel-heading span,
+.admin-section-heading span,
+.admin-section-heading > small,
+.admin-chart-summary > span,
+.admin-chart-legend,
+.admin-health-list dt,
+.admin-response-item small,
+.admin-response-item p,
+.admin-network-tools input,
+.admin-footer,
+.admin-map-count,
+.admin-map-legend { font-size: 12px; line-height: 1.4; }
+.admin-kpi-card > strong small,
+.admin-health-list dd,
+.admin-sensor-row,
+.admin-sensor-drawer dd { font-size: 13px; }
+.admin-sensor-row.header,
+.admin-station-name small,
+.admin-sensor-row em,
+.admin-sensor-drawer > header span,
+.admin-drawer-status,
+.admin-sensor-drawer dt,
+.admin-sensor-drawer > section span { font-size: 11px; }
+.admin-station-name strong { font-size: 14px; }
+.admin-chart-axis { font-size: 11px; }
+
+.admin-login-header { display: flex; align-items: flex-start; justify-content: space-between; gap: 18px; }
+.admin-language-toggle {
+  min-height: 40px;
+  padding: 0 11px;
+  border: 1px solid var(--admin-border);
+  color: var(--admin-text);
+  background: transparent;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  font-size: 12px;
+  font-weight: 750;
+  cursor: pointer;
+  transition: border-color 160ms ease, background-color 160ms ease;
+}
+.admin-language-toggle:hover { border-color: var(--admin-orange); background: rgba(239, 107, 46, 0.1); }
+.admin-login-header-actions { display: flex; align-items: center; gap: 8px; }
+.admin-user-return {
+  min-height: 40px;
+  padding: 0 11px;
+  border: 1px solid var(--admin-border);
+  color: var(--admin-text);
+  background: transparent;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  font-size: 12px;
+  font-weight: 750;
+  cursor: pointer;
+  transition: border-color 160ms ease, background-color 160ms ease;
+}
+.admin-user-return:hover { border-color: var(--admin-orange); background: rgba(239, 107, 46, 0.1); }
+.admin-prototype-credentials {
+  margin: 18px 0 14px;
+  padding: 13px 14px;
+  border: 1px solid rgba(239, 107, 46, 0.55);
+  color: var(--admin-text);
+  background: rgba(239, 107, 46, 0.08);
+  display: grid;
+  gap: 5px;
+  font-size: 13px;
+  line-height: 1.4;
+}
+.admin-prototype-credentials > strong { margin-bottom: 2px; color: var(--admin-orange); font-size: 12px; }
+.admin-prototype-credentials span { color: var(--admin-muted); }
+.admin-prototype-credentials b { color: var(--admin-text); font-weight: 750; }
+.admin-login-message p,
+.admin-login-panel form > p { font-size: 15px; }
+.admin-login-panel label,
+.admin-login-disclosure,
+.admin-login-network span { font-size: 12px; }
+.admin-login-field input,
+.admin-login-submit { font-size: 14px; }
+
+@media (min-width: 900px) {
+  .app-shell[data-page='pulse'] .app-content {
+    width: calc(100% - 96px);
+    height: calc(100dvh - 72px);
+    margin-left: 96px;
+  }
+
+  .app-shell[data-page='pulse'] .bottom-nav {
+    width: 96px;
+    height: auto;
+    padding: 12px 7px;
+    border-top: 0;
+    border-right: 1px solid rgba(23, 18, 22, 0.2);
+    grid-template-columns: 1fr;
+    grid-template-rows: repeat(5, minmax(70px, 1fr));
+    position: absolute;
+    left: 0;
+    right: auto;
+    top: 72px;
+    bottom: 0;
+  }
+
+  .app-shell[data-page='pulse'] .nav-button { justify-content: center; }
+  .app-shell[data-page='pulse'] .nav-button.active .nav-icon-wrap::after {
+    width: 3px;
+    height: 28px;
+    left: -16px;
+    top: 0;
+    bottom: auto;
+  }
+
+  .app-shell:not(.landing-mode):not(.onboarding-mode):not(.admin-mode):not([data-page='pulse']) .app-content {
+    width: calc(100% - 96px);
+    margin-left: 96px;
+  }
+
+  .app-shell:not(.landing-mode):not(.onboarding-mode):not(.admin-mode):not([data-page='pulse']) .bottom-nav { width: 96px; }
+  .app-shell:not(.landing-mode) .nav-button { font-size: 11px; }
+  .app-shell:not(.landing-mode) .brand-lockup .brand-copy > span { font-size: 10px; }
+  .app-shell:not(.landing-mode) .language-button,
+  .app-shell:not(.landing-mode) .menu-button { font-size: 12px; }
+}
+
+@media (max-width: 899px) {
+  .brand-menu-indicator { display: inline-flex !important; }
+  .app-shell:not(.landing-mode):not(.admin-mode) .menu-button { display: none; }
+  .app-menu-panel { width: auto; left: 14px; right: 14px; }
+  .app-shell:not(.landing-mode) .nav-button { font-size: 11px; }
+}
+
+@media (max-width: 760px) {
+  .film-coordinate { font-size: 10px; }
+  .film-hero-story p { font-size: 15px; }
+  .film-scroll-index { font-size: 8px; }
+  .film-map-note span { font-size: 9px; }
+  .method-rail {
+    width: 36px;
+    left: 18px;
+  }
+  .method-rail span {
+    grid-template-columns: 19px 1fr;
+    gap: 4px;
+    font-size: 9px;
+  }
+  .method-copy-stack {
+    width: calc(100% - 86px);
+    left: 70px;
+    right: 16px;
+  }
+  .method-copy-stack article > span { font-size: 11px; }
+  .method-copy-stack p { font-size: 14px; line-height: 1.5; }
+  .method-visual { width: calc(100% - 55px); }
+  .method-data-points em { min-width: 142px; font-size: 8px; }
+  .method-section-label { font-size: 9px; }
+  .network-name-row span { font-size: 11px; }
+  .film-footer span,
+  .film-footer p { font-size: 9px; }
+}
+
+@media (max-width: 520px) {
+  .app-shell:not(.landing-mode) .app-header,
+  .app-shell[data-page='pulse'] .app-header { padding-left: 14px; padding-right: 14px; }
+  .brand-copy > span { max-width: 124px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .translation-status { right: 10px; top: 78px; max-width: calc(100vw - 20px); font-size: 13px; }
+  .admin-language-toggle { min-width: 42px; padding: 0 9px; font-size: 0; }
+  .admin-user-return { width: 42px; padding: 0; font-size: 0; }
+}
+
+@media (max-width: 380px) {
+  .method-rail { left: 14px; }
+  .method-copy-stack { width: calc(100% - 72px); left: 58px; right: 14px; }
+  .method-copy-stack p { font-size: 13px; }
+  .method-data-points em { min-width: 126px; font-size: 7px; }
+}
+
+/* Final shared community shell: one header and one navigation treatment on every user page. */
+.app-shell:not(.landing-mode):not(.onboarding-mode):not(.admin-mode) .app-header {
+  height: 72px;
+  padding: max(10px, env(safe-area-inset-top)) 20px 10px;
+  border-bottom: 1px solid rgba(23, 18, 22, 0.2);
+  background: #f4f0e5;
+  backdrop-filter: none;
+  position: relative;
+  z-index: 200;
+  overflow: visible;
+  isolation: isolate;
+}
+
+.app-shell:not(.landing-mode):not(.onboarding-mode):not(.admin-mode) .brand-lockup {
+  gap: 11px;
+}
+
+.app-shell:not(.landing-mode):not(.onboarding-mode):not(.admin-mode) .brand-button {
+  min-height: 44px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+}
+
+.app-shell:not(.landing-mode):not(.onboarding-mode):not(.admin-mode) .brand-mark {
+  width: 34px;
+  height: 34px;
+  border: 0;
+  border-radius: 50%;
+  color: #171216;
+  background: #e65e17;
+  box-shadow: none;
+}
+
+.app-shell:not(.landing-mode):not(.onboarding-mode):not(.admin-mode) .brand-mark span {
+  height: 1px;
+  background: #171216;
+}
+
+.app-shell:not(.landing-mode):not(.onboarding-mode):not(.admin-mode) .brand-lockup strong {
+  color: #171216;
+  font-family: Georgia, 'Times New Roman', serif;
+  font-size: 18px;
+  font-weight: 700;
+  letter-spacing: -0.045em;
+}
+
+.app-shell:not(.landing-mode):not(.onboarding-mode):not(.admin-mode) .brand-lockup .brand-copy > span {
+  margin-top: 4px;
+  color: #746d70;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-size: 10px;
+  font-weight: 800;
+  line-height: 1.1;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.app-shell:not(.landing-mode):not(.onboarding-mode):not(.admin-mode) .header-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.app-shell:not(.landing-mode):not(.onboarding-mode):not(.admin-mode) .language-button,
+.app-shell:not(.landing-mode):not(.onboarding-mode):not(.admin-mode) .menu-button {
+  height: 44px;
+  min-height: 44px;
+  padding: 0 12px;
+  border: 1px solid rgba(23, 18, 22, 0.2);
+  border-radius: 0;
+  color: #171216;
+  background: #faf7ef;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-size: 12px;
+  font-weight: 800;
+  line-height: 1;
+}
+
+.app-shell:not(.landing-mode):not(.onboarding-mode):not(.admin-mode) .language-button {
+  min-width: 76px;
+}
+
+.app-shell:not(.landing-mode):not(.onboarding-mode):not(.admin-mode) .menu-button {
+  min-width: 90px;
+}
+
+.app-shell:not(.landing-mode):not(.onboarding-mode):not(.admin-mode) .menu-button.active {
+  color: #fff8ef;
+  border-color: #e65e17;
+  background: #e65e17;
+}
+
+.app-shell:not(.landing-mode):not(.onboarding-mode):not(.admin-mode) .app-menu-panel {
+  border-color: rgba(23, 18, 22, 0.25);
+  background: #faf7ef;
+  backdrop-filter: none;
+  z-index: 300;
+  pointer-events: auto;
+}
+
+.app-shell:not(.landing-mode):not(.onboarding-mode):not(.admin-mode) .app-menu-panel > button:not(.authority-menu-link) {
+  background: #faf7ef;
+}
+
+.app-shell:not(.landing-mode):not(.onboarding-mode):not(.admin-mode) .app-menu-panel > button:not(.authority-menu-link):hover,
+.app-shell:not(.landing-mode):not(.onboarding-mode):not(.admin-mode) .app-menu-panel > button:not(.authority-menu-link):focus-visible {
+  background: #f7e5d8;
+}
+
+.app-shell:not(.landing-mode):not(.onboarding-mode):not(.admin-mode) .app-content {
+  height: calc(100dvh - 72px - 74px);
+  background: transparent;
+  position: relative;
+  z-index: 1;
+}
+
+.app-shell:not(.landing-mode):not(.onboarding-mode):not(.admin-mode) .bottom-nav {
+  width: 100%;
+  height: 74px;
+  padding: 6px 8px max(7px, env(safe-area-inset-bottom));
+  border-top: 1px solid rgba(23, 18, 22, 0.2);
+  border-right: 0;
+  background: #f4f0e5;
+  backdrop-filter: none;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  grid-template-rows: 1fr;
+  position: relative;
+  inset: auto;
+  z-index: 40;
+}
+
+.app-shell:not(.landing-mode):not(.onboarding-mode):not(.admin-mode) .nav-button {
+  min-height: 54px;
+  padding: 5px 2px;
+  color: #898185;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+}
+
+.app-shell:not(.landing-mode):not(.onboarding-mode):not(.admin-mode) .nav-button.active {
+  color: #171216;
+  background: transparent;
+  transform: none;
+}
+
+.app-shell:not(.landing-mode):not(.onboarding-mode):not(.admin-mode) .nav-icon-wrap,
+.app-shell:not(.landing-mode):not(.onboarding-mode):not(.admin-mode) .nav-button.active .nav-icon-wrap {
+  width: 38px;
+  height: 29px;
+  border-radius: 0;
+  background: transparent;
+}
+
+.app-shell:not(.landing-mode):not(.onboarding-mode):not(.admin-mode) .nav-button.active .nav-icon-wrap::after {
+  width: 20px;
+  height: 2px;
+  content: '';
+  background: #e65e17;
+  position: absolute;
+  left: 9px;
+  bottom: -2px;
+}
+
+/* Compact, plain station facts. */
+.app-shell:not(.landing-mode):not(.onboarding-mode):not(.admin-mode):not([data-page='pulse']) .station-metrics span,
+.app-shell:not(.landing-mode):not(.onboarding-mode):not(.admin-mode):not([data-page='pulse']) .station-metrics strong {
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 12px;
+  line-height: 1.32;
+  letter-spacing: 0;
+}
+
+.app-shell:not(.landing-mode):not(.onboarding-mode):not(.admin-mode):not([data-page='pulse']) .station-metrics strong {
+  margin-top: 4px;
+  font-weight: 700;
+}
+
+/* Report evidence hierarchy and privacy alignment. */
+.app-shell:not(.landing-mode):not(.onboarding-mode):not(.admin-mode):not([data-page='pulse']) .report-page .evidence-button strong {
+  color: #171216;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 16px;
+  line-height: 1.25;
+}
+
+.app-shell:not(.landing-mode):not(.onboarding-mode):not(.admin-mode):not([data-page='pulse']) .report-page .evidence-button small {
+  margin-top: 3px;
+  color: #746d70;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 13px;
+  font-weight: 400;
+  line-height: 1.35;
+}
+
+.app-shell:not(.landing-mode):not(.onboarding-mode):not(.admin-mode):not([data-page='pulse']) .report-page .privacy-note {
+  align-items: center;
+  gap: 10px;
+}
+
+.app-shell:not(.landing-mode):not(.onboarding-mode):not(.admin-mode):not([data-page='pulse']) .report-page .privacy-note > svg {
+  align-self: center;
+  flex: 0 0 auto;
+}
+
+.app-shell:not(.landing-mode):not(.onboarding-mode):not(.admin-mode):not([data-page='pulse']) .report-page .privacy-note p {
+  margin: 0;
+  font-size: 12px;
+  line-height: 1.4;
+}
+
+/* Connected assistant feedback. */
+.suggestion-row button:disabled {
+  opacity: 0.5;
+  cursor: wait;
+}
+
+.message.pending p {
+  min-width: 72px;
+  min-height: 45px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+}
+
+.chat-loading-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #e65e17;
+  animation: chat-loading 900ms ease-in-out infinite alternate;
+}
+
+.chat-loading-dot:nth-child(2) { animation-delay: 150ms; }
+.chat-loading-dot:nth-child(3) { animation-delay: 300ms; }
+
+@keyframes chat-loading {
+  from { opacity: 0.35; transform: translateY(2px); }
+  to { opacity: 1; transform: translateY(-2px); }
+}
+
+.app-shell:not(.landing-mode):not(.onboarding-mode):not(.admin-mode):not([data-page='pulse']) .chat-error {
+  margin: 0 0 10px;
+  padding: 10px 12px;
+  border-left: 3px solid #b94831;
+  color: #8f3323;
+  background: #f7e5df;
+  font-size: 13px;
+  line-height: 1.4;
+}
+
+.home-v3-audio-disclosure {
+  margin-top: 7px;
+  color: inherit;
+  opacity: 0.68;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 11px;
+  line-height: 1.3;
+}
+
+/* Community text follows the restrained authority hierarchy, enlarged by 2px. */
+.app-shell:not(.landing-mode):not(.onboarding-mode):not(.admin-mode):not([data-page='pulse']) .page p {
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.app-shell:not(.landing-mode):not(.onboarding-mode):not(.admin-mode):not([data-page='pulse']) .page small,
+.app-shell:not(.landing-mode):not(.onboarding-mode):not(.admin-mode):not([data-page='pulse']) .eyebrow,
+.app-shell:not(.landing-mode):not(.onboarding-mode):not(.admin-mode):not([data-page='pulse']) .timeline-item > div span,
+.app-shell:not(.landing-mode):not(.onboarding-mode):not(.admin-mode):not([data-page='pulse']) .source-card small,
+.app-shell:not(.landing-mode):not(.onboarding-mode):not(.admin-mode):not([data-page='pulse']) .feature-card .eyebrow {
+  font-size: 13px;
+  line-height: 1.4;
+}
+
+.app-shell:not(.landing-mode):not(.onboarding-mode):not(.admin-mode):not([data-page='pulse']) .page-intro,
+.app-shell:not(.landing-mode):not(.onboarding-mode):not(.admin-mode):not([data-page='pulse']) .feature-card p {
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.app-shell[data-page='pulse']:not(.landing-mode):not(.onboarding-mode):not(.admin-mode) .home-v3-reading p,
+.app-shell[data-page='pulse']:not(.landing-mode):not(.onboarding-mode):not(.admin-mode) .home-v3-guidance > p,
+.app-shell[data-page='pulse']:not(.landing-mode):not(.onboarding-mode):not(.admin-mode) .home-v3-outlook > p,
+.app-shell[data-page='pulse']:not(.landing-mode):not(.onboarding-mode):not(.admin-mode) .home-v3-trend > p {
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+@media (min-width: 900px) {
+  .app-shell:not(.landing-mode):not(.onboarding-mode):not(.admin-mode) .app-content {
+    width: calc(100% - 96px);
+    height: calc(100dvh - 72px);
+    margin-left: 96px;
+  }
+
+  .app-shell:not(.landing-mode):not(.onboarding-mode):not(.admin-mode) .bottom-nav {
+    width: 96px;
+    height: auto;
+    padding: 12px 7px;
+    border-top: 0;
+    border-right: 1px solid rgba(23, 18, 22, 0.2);
+    grid-template-columns: 1fr;
+    grid-template-rows: repeat(5, minmax(70px, 1fr));
+    position: absolute;
+    left: 0;
+    right: auto;
+    top: 72px;
+    bottom: 0;
+  }
+
+  .app-shell:not(.landing-mode):not(.onboarding-mode):not(.admin-mode) .nav-button {
+    width: 100%;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 3px;
+  }
+
+  .app-shell:not(.landing-mode):not(.onboarding-mode):not(.admin-mode) .nav-button.active .nav-icon-wrap::after {
+    display: block;
+    width: 3px;
+    height: 28px;
+    left: -16px;
+    top: 0;
+    bottom: auto;
+  }
+}
+
+@media (max-width: 899px) {
+  .app-shell:not(.landing-mode):not(.onboarding-mode):not(.admin-mode) .menu-button {
+    display: none;
+  }
+
+  .app-shell:not(.landing-mode):not(.onboarding-mode):not(.admin-mode) .brand-menu-indicator {
+    display: inline-flex !important;
+  }
+}
+
+@media (max-width: 520px) {
+  .app-shell:not(.landing-mode):not(.onboarding-mode):not(.admin-mode) .app-header {
+    padding-left: 14px;
+    padding-right: 14px;
+  }
+
+  .app-shell:not(.landing-mode):not(.onboarding-mode):not(.admin-mode) .language-button {
+    min-width: 72px;
+    padding-inline: 10px;
+  }
+
+  .app-shell:not(.landing-mode):not(.onboarding-mode):not(.admin-mode) .evidence-buttons {
+    grid-template-columns: 1fr;
+  }
+
+  .app-shell:not(.landing-mode):not(.onboarding-mode):not(.admin-mode) .evidence-button + .evidence-button {
+    border-top: 0;
+    border-left: 1px solid rgba(23, 18, 22, 0.18);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .chat-loading-dot { animation: none; }
+}

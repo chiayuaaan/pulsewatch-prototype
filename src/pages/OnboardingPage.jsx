@@ -14,7 +14,7 @@ const slides = {
   en: [
     {
       icon: Waves,
-      image: '/guide-home.png',
+      image: '/guide-home-sharp.jpg',
       fallback: '/tonle-sap-landscape.png',
       alt: 'PulseWatch Home page showing today’s water condition',
       label: 'Home page',
@@ -23,7 +23,7 @@ const slides = {
     },
     {
       icon: MapPinned,
-      image: '/guide-map.png',
+      image: '/guide-map-sharp.jpg',
       fallback: '/tonle-sap-landscape.png',
       alt: 'PulseWatch Map page showing nearby water gauges',
       label: 'Map page',
@@ -32,7 +32,7 @@ const slides = {
     },
     {
       icon: Sprout,
-      image: '/guide-alerts.png',
+      image: '/guide-alerts-sharp.jpg',
       fallback: '/tonle-sap-aerial.png',
       alt: 'PulseWatch Alerts page showing community guidance',
       label: 'Alerts page',
@@ -94,7 +94,7 @@ const interfaceCopy = {
   },
 };
 
-export default function OnboardingPage({ language = 'en', onToggleLanguage, onNavigate }) {
+export default function OnboardingPage({ language = 'en', activeLanguage = 'en', onToggleLanguage, onNavigate }) {
   const [step, setStep] = useState(0);
   const t = interfaceCopy[language] ?? interfaceCopy.en;
   const items = slides[language] ?? slides.en;
@@ -109,8 +109,8 @@ export default function OnboardingPage({ language = 'en', onToggleLanguage, onNa
           <BrandMark />
           <span><strong>PulseWatch</strong><small>{t.progress}</small></span>
         </button>
-        <button className="onboarding-language" onClick={onToggleLanguage} type="button" aria-label={t.language}>
-          <Languages size={18} /> {language === 'en' ? 'ខ្មែរ' : 'English'}
+        <button className="onboarding-language" data-no-translate onClick={onToggleLanguage} type="button" aria-label={activeLanguage === 'en' ? 'Switch to Khmer' : 'Switch to English'}>
+          <Languages size={18} /> {activeLanguage === 'en' ? 'ខ្មែរ' : 'English'}
         </button>
       </header>
 

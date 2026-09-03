@@ -2,22 +2,10 @@ import { useState } from 'react';
 import { Bot, Send, ShieldCheck, Sparkles } from 'lucide-react';
 import { suggestionPrompts } from '../data/mockData';
 
-function mockAnswer(question) {
-  const normalized = question.toLowerCase();
-  if (normalized.includes('plant')) {
-    return 'For Kampong Phluk, the current advisory is to delay low-field planting for 7 days. The water level is 4.2 m—about 35% below the seasonal pattern. Check the next gauge update before preparing the lowest fields.';
-  }
-  if (normalized.includes('nearest') || normalized.includes('station')) {
-    return 'Kampong Phluk Gauge 02 is your nearest station, about 2.4 km away. It is online and last reported 2 minutes ago.';
-  }
-  if (normalized.includes('weak') || normalized.includes('why')) {
-    return 'The pulse is marked weak because the lake is rising more slowly than the 1997–2009 seasonal baseline. Nearby gauges currently show an average deviation of 35%. This status comes from sensor data, not from the assistant.';
-  }
-  return 'I can explain the latest PulseWatch readings and approved community guidance. For this prototype, try asking about the weak pulse, planting, or your nearest station.';
-}
-
 export default function AskPage({ onNavigate }) {
   const [input, setInput] = useState('');
+  const [sending, setSending] = useState(false);
+  const [error, setError] = useState('');
   const [messages, setMessages] = useState([
     {
       role: 'assistant',
@@ -25,15 +13,32 @@ export default function AskPage({ onNavigate }) {
     },
   ]);
 
-  const sendMessage = (text) => {
+  const sendMessage = async (text) => {
     const clean = text.trim();
-    if (!clean) return;
-    setMessages((current) => [
-      ...current,
-      { role: 'user', text: clean },
-      { role: 'assistant', text: mockAnswer(clean) },
-    ]);
+    if (!clean || sending) return;
+
+    const nextMessages = [...messages, { role: 'user', text: clean }];
+    setMessages(nextMessages);
     setInput('');
+    setError('');
+    setSending(true);
+
+    try {
+      const apiResponse = await fetch('/api/chat', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ messages: nextMessages.slice(-10) }),
+      });
+      const payload = await apiResponse.json();
+      if (!apiResponse.ok || typeof payload.answer !== 'string') {
+        throw new Error(payload.error || 'The guidance service did not return an answer.');
+      }
+      setMessages((current) => [...current, { role: 'assistant', text: payload.answer }]);
+    } catch {
+      setError('PulseWatch could not reach the guidance service. Please check your connection and try again.');
+    } finally {
+      setSending(false);
+    }
   };
 
   return (
@@ -46,7 +51,7 @@ export default function AskPage({ onNavigate }) {
       </section>
       <div className="suggestion-row">
         {suggestionPrompts.map((prompt) => (
-          <button key={prompt} onClick={() => sendMessage(prompt)} type="button">{prompt}</button>
+          <button key={prompt} onClick={() => sendMessage(prompt)} disabled={sending} type="button">{prompt}</button>
         ))}
       </div>
       <section className="chat-panel" aria-live="polite">
@@ -54,19 +59,26 @@ export default function AskPage({ onNavigate }) {
           <div className={`message ${message.role}`} key={`${message.role}-${index}`}>
             {message.role === 'assistant' && <span className="avatar"><Bot size={17} /></span>}
             <div>
-              <p>{message.text}</p>
+              <p data-no-translate={message.role === 'user' ? 'true' : undefined}>{message.text}</p>
               {message.role === 'assistant' && index > 0 && (
                 <button className="source-link" onClick={() => onNavigate('map')} type="button"><ShieldCheck size={14} /> View verified sources</button>
               )}
             </div>
           </div>
         ))}
+        {sending && (
+          <div className="message assistant pending" aria-label="PulseWatch is preparing an answer">
+            <span className="avatar"><Bot size={17} /></span>
+            <div><p><span className="chat-loading-dot" /><span className="chat-loading-dot" /><span className="chat-loading-dot" /></p></div>
+          </div>
+        )}
       </section>
+      {error && <p className="chat-error" role="alert">{error}</p>}
       <form className="chat-composer" onSubmit={(event) => { event.preventDefault(); sendMessage(input); }}>
-        <input value={input} onChange={(event) => setInput(event.target.value)} placeholder="Ask about the pulse..." aria-label="Ask PulseWatch" />
-        <button type="submit" disabled={!input.trim()} aria-label="Send question"><Send size={18} /></button>
+        <input value={input} onChange={(event) => setInput(event.target.value)} placeholder="Ask about the pulse..." aria-label="Ask PulseWatch" disabled={sending} />
+        <button type="submit" disabled={!input.trim() || sending} aria-label="Send question"><Send size={18} /></button>
       </form>
-      <p className="assistant-note"><ShieldCheck size={13} /> Prototype assistant · No live AI connection</p>
+      <p className="assistant-note"><ShieldCheck size={13} /> OpenAI guide · Answers limited to verified prototype readings</p>
     </div>
   );
 }

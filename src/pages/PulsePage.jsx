@@ -41,6 +41,7 @@ const homeCopy = {
     loadingAudio: 'Loading Khmer audio…',
     audioUnavailable: 'Khmer audio is unavailable. Check your connection and try again.',
     playing: 'Playing Khmer guidance…',
+    audioDisclosure: 'AI-generated Khmer voice',
     forecast: 'Full forecast',
     outlookTitle: 'Water forecast',
     outlookSummary: 'Water should continue rising, but it will remain below the normal seasonal level.',
@@ -96,6 +97,7 @@ const homeCopy = {
     loadingAudio: 'កំពុងទាញយកសំឡេងខ្មែរ…',
     audioUnavailable: 'មិនអាចចាក់សំឡេងខ្មែរបានទេ។ សូមពិនិត្យអ៊ីនធឺណិត ហើយព្យាយាមម្ដងទៀត។',
     playing: 'កំពុងចាក់ការណែនាំជាភាសាខ្មែរ…',
+    audioDisclosure: 'សំឡេងខ្មែរបង្កើតដោយ AI',
     forecast: 'ការព្យាករណ៍ពេញលេញ',
     outlookTitle: 'ការព្យាករណ៍ទឹក',
     outlookSummary: 'ទឹកនឹងបន្តឡើង ប៉ុន្តែនៅតែទាបជាងកម្រិតធម្មតាតាមរដូវ។',
@@ -150,6 +152,8 @@ export default function PulsePage({ language = 'en', onNavigate }) {
   const [speechState, setSpeechState] = useState('idle');
   const [khmerVoice, setKhmerVoice] = useState(null);
   const audioRef = useRef(null);
+  const audioObjectUrlRef = useRef(null);
+  const speechRequestRef = useRef(null);
   const utteranceRef = useRef(null);
   const t = homeCopy[language] ?? homeCopy.en;
 
@@ -162,18 +166,26 @@ export default function PulsePage({ language = 'en', onNavigate }) {
   }, []);
 
   useEffect(() => () => {
+    speechRequestRef.current?.abort();
     if (audioRef.current) {
       audioRef.current.pause();
       audioRef.current.src = '';
     }
+    if (audioObjectUrlRef.current) URL.revokeObjectURL(audioObjectUrlRef.current);
     if ('speechSynthesis' in window) window.speechSynthesis.cancel();
   }, []);
 
   const stopKhmerGuidance = () => {
+    speechRequestRef.current?.abort();
+    speechRequestRef.current = null;
     if (audioRef.current) {
       audioRef.current.pause();
       audioRef.current.currentTime = 0;
       audioRef.current = null;
+    }
+    if (audioObjectUrlRef.current) {
+      URL.revokeObjectURL(audioObjectUrlRef.current);
+      audioObjectUrlRef.current = null;
     }
     if ('speechSynthesis' in window) window.speechSynthesis.cancel();
     utteranceRef.current = null;
@@ -212,6 +224,30 @@ export default function PulsePage({ language = 'en', onNavigate }) {
     stopKhmerGuidance();
     setSpeechState('loading');
 
+    const availableAudioSources = [];
+    const speechRequest = new AbortController();
+    speechRequestRef.current = speechRequest;
+    try {
+      const apiResponse = await fetch('/api/khmer-audio', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ guidanceId: 'home' }),
+        signal: speechRequest.signal,
+      });
+      if (!apiResponse.ok) throw new Error('Speech request failed');
+      const audioBlob = await apiResponse.blob();
+      if (!audioBlob.size) throw new Error('Speech response was empty');
+      const objectUrl = URL.createObjectURL(audioBlob);
+      audioObjectUrlRef.current = objectUrl;
+      availableAudioSources.push(objectUrl);
+    } catch {
+      if (speechRequest.signal.aborted) return;
+      // Continue with the low-bandwidth browser and device fallbacks below.
+    } finally {
+      if (speechRequestRef.current === speechRequest) speechRequestRef.current = null;
+    }
+    availableAudioSources.push(...khmerGuidanceAudioSources);
+
     let fallbackStarted = false;
     const startFallback = () => {
       if (fallbackStarted) return;
@@ -225,12 +261,12 @@ export default function PulsePage({ language = 'en', onNavigate }) {
 
     let sourceIndex = 0;
     const tryNextAudioSource = async () => {
-      if (sourceIndex >= khmerGuidanceAudioSources.length) {
+      if (sourceIndex >= availableAudioSources.length) {
         startFallback();
         return;
       }
 
-      const audio = new Audio(khmerGuidanceAudioSources[sourceIndex]);
+      const audio = new Audio(availableAudioSources[sourceIndex]);
       sourceIndex += 1;
       let sourceFailed = false;
       const tryFollowingSource = () => {
@@ -340,6 +376,7 @@ export default function PulsePage({ language = 'en', onNavigate }) {
           {speechState === 'playing' && t.playing}
           {speechState === 'error' && t.audioUnavailable}
         </p>
+        <small className="home-v3-audio-disclosure"><Info size={13} /> {t.audioDisclosure}</small>
       </section>
 
       <section className="home-v3-outlook">
