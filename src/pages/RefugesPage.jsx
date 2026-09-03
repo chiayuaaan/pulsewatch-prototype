@@ -19,12 +19,12 @@ export default function RefugesPage({ onNavigate }) {
 
       <section className="refuge-forecast-card">
         <span className="refuge-forecast-icon"><Sparkles size={22} /></span>
-        <div>
+        <div className="refuge-forecast-copy">
           <span className="eyebrow">PLACEMENT RECOMMENDATION</span>
           <h2>Deploy one refuge near Kampong Phluk.</h2>
           <p>The 3-month outlook predicts insufficient shallow nursery habitat in Zone 2.</p>
+          <span className="confidence-chip">78% confidence</span>
         </div>
-        <span className="confidence-chip">78% confidence</span>
       </section>
 
       <div className="section-heading compact refuge-list-heading">

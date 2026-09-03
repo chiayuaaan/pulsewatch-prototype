@@ -8,6 +8,7 @@ import {
   RefreshCw,
   ShieldCheck,
 } from 'lucide-react';
+import { stations } from '../data/mockData';
 
 const features = [
   { id: 'refuges', eyebrow: 'ADAPTATION', title: 'Adaptive fish refuges', text: 'Track habitat health and forecast-led placement.', icon: Fish, tone: 'green' },
@@ -17,6 +18,8 @@ const features = [
 ];
 
 export default function MorePage({ onNavigate }) {
+  const onlineStations = stations.filter((station) => station.online).length;
+
   return (
     <div className="page more-page">
       <div className="section-heading">
@@ -39,7 +42,7 @@ export default function MorePage({ onNavigate }) {
 
       <button className="network-shortcut" onClick={() => onNavigate('map')} type="button">
         <span><Radio size={21} /></span>
-        <div><small>MONITORING NETWORK</small><strong>10 of 12 stations are online</strong></div>
+        <div><small>MONITORING NETWORK</small><strong>{onlineStations} of {stations.length} stations are online</strong></div>
         <ArrowRight size={17} />
       </button>
 

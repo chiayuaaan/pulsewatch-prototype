@@ -1,34 +1,46 @@
-import { Navigation, Radio } from 'lucide-react';
+import { ExternalLink, Navigation } from 'lucide-react';
 import { stations } from '../data/mockData';
 
 export default function LakeMap({ selected, onSelect }) {
+  const googleMapsUrl = `https://www.google.com/maps/search/?api=1&query=${selected.lat},${selected.lng}`;
+  const mapCenter = { lat: 12.85, lng: 104.05 };
+  const pixelsPerLongitudeDegree = 182;
+  const pixelsPerLatitudeDegree = 187;
+
   return (
-    <div className="lake-map">
-      <div className="map-noise" />
-      <svg className="lake-shape" viewBox="0 0 340 470" aria-hidden="true">
-        <path d="M184 18c38 23 45 72 74 111 26 35 59 62 50 102-9 41-60 50-79 87-19 38-10 96-53 124-39 25-82-5-103-43-20-36 6-80-4-119-12-43-55-71-37-118 17-44 69-49 93-84 19-27 24-80 59-60Z" />
-        <path className="river" d="M185 15c-7 45-25 70-4 111 19 38 59 54 45 100" />
-      </svg>
-      <span className="map-label lake-label">TONLE SAP</span>
-      <span className="map-label siem-label">SIEM REAP</span>
-      <span className="map-label south-label">KAMPONG CHHNANG</span>
-      {stations.map((station) => (
+    <div className="lake-map google-sensor-map">
+      <iframe
+        className="google-map-frame"
+        title="Google Maps view of the Tonle Sap sensor network"
+        src="https://maps.google.com/maps?ll=12.85%2C104.05&t=k&z=8&ie=UTF8&iwloc=&output=embed"
+        loading="lazy"
+        referrerPolicy="no-referrer-when-downgrade"
+      />
+      <div className="google-map-shade" aria-hidden="true" />
+      <span className="sensor-count-badge">15 sensors</span>
+      {stations.map((station, index) => (
         <button
           key={station.id}
           className={`map-pin ${station.tone} ${selected.id === station.id ? 'selected' : ''}`}
-          style={{ left: `${station.x}%`, top: `${station.y}%` }}
+          style={{
+            left: `calc(50% + ${(station.lng - mapCenter.lng) * pixelsPerLongitudeDegree}px)`,
+            top: `calc(50% - ${(station.lat - mapCenter.lat) * pixelsPerLatitudeDegree}px)`,
+          }}
           onClick={() => onSelect(station)}
           aria-label={`${station.name}: ${station.status}`}
+          title={`${station.name} · ${station.status}`}
           type="button"
         >
-          <span><Radio size={15} /></span>
+          <span>{index + 1}</span>
         </button>
       ))}
-      <button className="locate-button" type="button" aria-label="Find my location"><Navigation size={19} /></button>
+      <a className="locate-button" href={googleMapsUrl} target="_blank" rel="noreferrer" aria-label={`Open ${selected.name} in Google Maps`}>
+        <Navigation size={18} /><ExternalLink size={11} />
+      </a>
       <div className="map-key">
         <span><i className="green" /> On schedule</span>
         <span><i className="amber" /> Weak</span>
-        <span><i className="red" /> Critical</span>
+        <span><i className="red" /> Critical / offline</span>
       </div>
     </div>
   );

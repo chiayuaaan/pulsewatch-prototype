@@ -1,9 +1,10 @@
 # PulseWatch Prototype
 
-A mobile-first React/Vite prototype that demonstrates the PulseWatch community experience using mock data. The source is modular: every page has its own file, with shared navigation, charts, map UI, and mock data extracted into reusable modules.
+A responsive React/Vite prototype that introduces PulseWatch through a cinematic public landing page, then opens the mobile community experience using mock data. The source is modular: every page has its own file, with shared navigation, charts, map UI, and mock data extracted into reusable modules.
 
 ## Included screens
 
+- Public PulseWatch landing page
 - Pulse overview
 - Live station map
 - Full station detail and sensor-health view
@@ -38,6 +39,7 @@ src/
     ├── AskPage.jsx
     ├── ForecastPage.jsx
     ├── ImpactPage.jsx
+    ├── LandingPage.jsx
     ├── MapPage.jsx
     ├── MorePage.jsx
     ├── PulsePage.jsx
