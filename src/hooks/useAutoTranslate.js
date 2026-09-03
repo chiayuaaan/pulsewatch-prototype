@@ -40,7 +40,7 @@ function withOriginalSpacing(original, translated) {
   return `${leading}${translated}${trailing}`;
 }
 
-function chunkTexts(texts, maxItems = 48, maxCharacters = 7000) {
+function chunkTexts(texts, maxItems = 12, maxCharacters = 2400) {
   const chunks = [];
   let current = [];
   let characters = 0;
@@ -78,7 +78,8 @@ export default function useAutoTranslate(rootRef, language, pageKey) {
     let active = true;
     let observer;
     let scheduleId;
-    let requestVersion = 0;
+    let translationRunning = false;
+    let translationQueued = false;
 
     const restoreEnglish = () => {
       trackedTextRef.current.forEach((node) => {
@@ -111,16 +112,18 @@ export default function useAutoTranslate(rootRef, language, pageKey) {
       const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT);
       let node = walker.nextNode();
       while (node) {
-        const element = node.parentElement;
+        const textNode = node;
+        const element = textNode.parentElement;
         if (!isBlocked(element)) {
-          if (!originalTextRef.current.has(node)) {
-            originalTextRef.current.set(node, node.nodeValue);
-            trackedTextRef.current.add(node);
+          if (!originalTextRef.current.has(textNode)) {
+            originalTextRef.current.set(textNode, textNode.nodeValue);
+            trackedTextRef.current.add(textNode);
           }
-          const original = originalTextRef.current.get(node);
+          const original = originalTextRef.current.get(textNode);
           addTarget(original, (translation) => {
+            if (!textNode.isConnected) return;
             const nextValue = withOriginalSpacing(original, translation);
-            if (node.nodeValue !== nextValue) node.nodeValue = nextValue;
+            if (textNode.nodeValue !== nextValue) textNode.nodeValue = nextValue;
           });
         }
         node = walker.nextNode();
@@ -140,6 +143,7 @@ export default function useAutoTranslate(rootRef, language, pageKey) {
           if (!(attribute in originals)) originals[attribute] = element.getAttribute(attribute);
           const original = originals[attribute];
           addTarget(original, (translation) => {
+            if (!element.isConnected) return;
             if (element.getAttribute(attribute) !== translation) element.setAttribute(attribute, translation);
           });
         });
@@ -158,13 +162,20 @@ export default function useAutoTranslate(rootRef, language, pageKey) {
 
     const translatePage = async () => {
       if (!active) return;
-      const version = ++requestVersion;
+      if (translationRunning) {
+        translationQueued = true;
+        return;
+      }
+
+      translationRunning = true;
+      translationQueued = false;
       const targets = collectTargets();
       applyKnownTranslations(targets);
       const missing = [...targets.keys()].filter((text) => !cacheRef.current[text]);
 
       if (!missing.length) {
         setStatus('ready');
+        translationRunning = false;
         return;
       }
 
@@ -177,8 +188,10 @@ export default function useAutoTranslate(rootRef, language, pageKey) {
             body: JSON.stringify({ texts, targetLanguage: 'km' }),
           });
 
-          if (!response.ok) throw new Error(`Translation service returned ${response.status}`);
-          const payload = await response.json();
+          const payload = await response.json().catch(() => ({}));
+          if (!response.ok) {
+            throw new Error(payload.detail || payload.error || `Translation service returned ${response.status}`);
+          }
           if (!Array.isArray(payload.translations) || payload.translations.length !== texts.length) {
             throw new Error('Translation service returned an invalid response');
           }
@@ -190,11 +203,15 @@ export default function useAutoTranslate(rootRef, language, pageKey) {
           saveCache(cacheRef.current);
         }
 
-        if (!active || version !== requestVersion) return;
+        if (!active) return;
         applyKnownTranslations(collectTargets());
         setStatus('ready');
-      } catch {
-        if (active && version === requestVersion) setStatus('unavailable');
+      } catch (error) {
+        console.error('[PulseWatch translation]', error);
+        if (active) setStatus('unavailable');
+      } finally {
+        translationRunning = false;
+        if (active && translationQueued) scheduleTranslation();
       }
     };
 
@@ -215,7 +232,6 @@ export default function useAutoTranslate(rootRef, language, pageKey) {
 
     return () => {
       active = false;
-      requestVersion += 1;
       window.clearTimeout(scheduleId);
       observer?.disconnect();
       restoreEnglish();
