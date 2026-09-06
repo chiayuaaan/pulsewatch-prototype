@@ -1854,6 +1854,12 @@ input:focus-visible {
   cursor: pointer;
 }
 
+.film-hero-copy button {
+  position: relative;
+  z-index: 6;
+  pointer-events: auto;
+}
+
 .film-hero-story {
   width: min(680px, calc(100% - 44px));
   position: absolute;
@@ -1863,6 +1869,7 @@ input:focus-visible {
   opacity: var(--hero-story-opacity);
   transform: translateY(calc(-50% + var(--hero-story-y)));
   will-change: opacity, transform;
+  pointer-events: none;
 }
 
 .film-coordinate,

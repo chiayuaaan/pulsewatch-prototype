@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { ArrowRight, Languages, Menu, Volume2, VolumeX, X } from 'lucide-react';
+import { ArrowRight, Languages, Menu, X } from 'lucide-react';
 
 const methodSteps = [
   {
@@ -121,6 +121,17 @@ export default function LandingPage({ language = 'en', onToggleLanguage, onNavig
     setMenuOpen(false);
   };
 
+  const scrollToNextSection = () => {
+    const scroller = rootRef.current?.closest('.landing-content');
+    const nextSection = rootRef.current?.querySelector('#what-we-do');
+    if (!scroller || !nextSection) return;
+
+    const destination = nextSection.getBoundingClientRect().top
+      - scroller.getBoundingClientRect().top
+      + scroller.scrollTop;
+    scroller.scrollTo({ top: destination, behavior: motionOn ? 'smooth' : 'auto' });
+  };
+
   return (
     <div className={`pw-film ${motionOn ? '' : 'motion-paused'}`} ref={rootRef}>
       <header className="film-nav">
@@ -149,7 +160,7 @@ export default function LandingPage({ language = 'en', onToggleLanguage, onNavig
             <div className="film-hero-copy">
               <span className="film-overline">PulseWatch</span>
               <h1>Shared intelligence<br />for the Tonle Sap<br />flood pulse</h1>
-              <button type="button" onClick={() => scrollTo('what-we-do')}>DISCOVER PULSEWATCH <ArrowRight size={11} /></button>
+              <button type="button" onClick={scrollToNextSection}>DISCOVER PULSEWATCH <ArrowRight size={11} /></button>
             </div>
 
             <div className="film-hero-story">
@@ -308,10 +319,6 @@ export default function LandingPage({ language = 'en', onToggleLanguage, onNavig
 
       <button className="film-language-toggle" data-no-translate type="button" onClick={onToggleLanguage} aria-label={language === 'en' ? 'Switch to Khmer' : 'Switch to English'}>
         <Languages size={14} /> {language === 'en' ? 'ខ្មែរ' : 'English'}
-      </button>
-      <button className="film-motion-toggle" type="button" onClick={() => setMotionOn((value) => !value)}>
-        {motionOn ? <Volume2 size={11} /> : <VolumeX size={11} />}
-        MOTION {motionOn ? 'ON' : 'OFF'}
       </button>
     </div>
   );
